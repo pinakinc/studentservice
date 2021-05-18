@@ -22,14 +22,16 @@ public class StudentServiceImpl implements StudentService{
 		
 	}
 	@Override
-	public StudentDto createUser(StudentDto studentDetails) {
+	public StudentDto createStudent(StudentDto studentDetails) {
 		studentDetails.setUserId(UUID.randomUUID().toString());
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		StudentEntity studentEntity = modelMapper.map(studentDetails, StudentEntity.class);
 		studentEntity.setEncryptedPassword("test1");
 		studentsRepository.save(studentEntity);
-		return null;
+		
+		StudentDto returnValue = modelMapper.map(studentEntity, StudentDto.class);
+		return returnValue;
 	}
 
 }

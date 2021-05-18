@@ -6,6 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import studentservice.data.StudentsRepository;
 import studentservice.service.StudentService;
 import studentservice.service.StudentServiceImpl;
 import studentservice.ui.model.CreateStudentRequestModel;
+import studentservice.ui.model.CreateStudentResponseModel;
 
 @RestController
 @RequestMapping("/students")
@@ -33,13 +36,13 @@ public class StudentServiceContoller {
 	}
 
 	@PostMapping
-	public String createStudent(@Valid @RequestBody CreateStudentRequestModel studentDetails) {
+	public ResponseEntity<CreateStudentResponseModel> createStudent(@Valid @RequestBody CreateStudentRequestModel studentDetails) {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		StudentDto studentDto = modelMapper.map(studentDetails, StudentDto.class);
-		studentService.createUser(studentDto);
-		
-		return "Create user method is called";
+		StudentDto createdStudent = studentService.createStudent(studentDto);
+		CreateStudentResponseModel returnValue = modelMapper.map(createdStudent, CreateStudentResponseModel.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
 	}
 
 }
