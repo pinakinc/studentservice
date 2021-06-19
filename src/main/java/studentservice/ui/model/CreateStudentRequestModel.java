@@ -12,7 +12,7 @@ public class CreateStudentRequestModel {
 	@Size(min=2,message="LastName cannot be less than two characters")
 	private String lastName;
 	@NotNull(message="Password cannot be null")
-	@Size(min=2,max=16,message="Password must be  equal to or greater than 8 characters and less than 16 characters")
+	@Size(min=8,max=16,message="Password must be  equal to or greater than 8 characters and less than 16 characters")
 	private String password;
 	@NotNull(message="Email cannot be null")
 	@Email
